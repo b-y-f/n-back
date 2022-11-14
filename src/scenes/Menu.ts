@@ -1,6 +1,9 @@
 import Phaser from 'phaser';
 
 let stats: Phaser.GameObjects.Text;
+let addNSample: Phaser.GameObjects.Text;
+let minNSample: Phaser.GameObjects.Text;
+let numOfSampleText: Phaser.GameObjects.Text;
 
 export default class Menu extends Phaser.Scene {
   trail: number;
@@ -58,9 +61,29 @@ export default class Menu extends Phaser.Scene {
     t_90.on('pointerdown', () => {
       this.trail = 90;
     });
+
+    this.add.text(100, 270, 'Number Sample', { font: '30px' });
+
+    addNSample = this.add
+      .text(380, 270, 'up', { font: '30px' })
+      .setInteractive();
+    addNSample.on('pointerdown', () => {
+      this.n_sound++;
+    });
+    minNSample = this.add
+      .text(500, 270, 'down', { font: '30px' })
+      .setInteractive();
+    minNSample.on('pointerdown', () => {
+      this.n_sound--;
+    });
+
+    numOfSampleText = this.add.text(440, 270, String(this.n_sound), {
+      font: '30px'
+    });
   }
 
   update() {
     stats.setText(['trail: ' + this.trail, 'nback: ' + this.nback]);
+    numOfSampleText.setText(String(this.n_sound));
   }
 }

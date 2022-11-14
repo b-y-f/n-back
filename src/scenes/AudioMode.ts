@@ -53,10 +53,10 @@ async function nback_game(
   let correct_cond = false;
   audio.input.on('pointerdown', () => {
     if (correct_cond) {
-      console.log('good');
+      // console.log('good');
       correct.play();
     } else {
-      console.log('bad');
+      // console.log('bad');
       wrong.play();
     }
   });
@@ -71,7 +71,6 @@ async function nback_game(
   }
   audio.add.text(500, 600, String(audio.score), { font: '40px' });
 
-  // TODO show result and go to menu
 }
 
 export default class AudioMode extends Phaser.Scene {
