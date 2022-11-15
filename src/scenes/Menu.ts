@@ -1,23 +1,24 @@
 import Phaser from 'phaser';
 let stats: Phaser.GameObjects.Text;
-let addNSample: Phaser.GameObjects.Text;
-let minNSample: Phaser.GameObjects.Text;
-let numOfSampleText: Phaser.GameObjects.Text;
 
 export default class Menu extends Phaser.Scene {
+  sounds: string[];
   gameSettings: {
     trail: number;
     nback: number;
     interval: number;
     n_sound: number;
+    sound_type: string;
   };
   constructor() {
     super('Menu');
+    this.sounds = ['alpha', 'digit'];
     this.gameSettings = {
       trail: 60,
       nback: 3,
       interval: 3,
-      n_sound: 5
+      n_sound: 5,
+      sound_type: this.sounds[0]
     };
   }
 
@@ -64,25 +65,70 @@ export default class Menu extends Phaser.Scene {
 
     this.add.text(50, 270, 'Sample', { font: '30px' });
 
-    addNSample = this.add
-      .text(250, 270, 'up', { font: '30px' })
-      .setInteractive();
-    addNSample.on('pointerdown', () => {
-      this.gameSettings.n_sound++;
-    });
-    minNSample = this.add
-      .text(350, 270, 'down', { font: '30px' })
-      .setInteractive();
-    minNSample.on('pointerdown', () => {
-      this.gameSettings.n_sound--;
-    });
+    this.add
+      .text(350, 270, '➕', { font: '30px' })
+      .setInteractive()
+      .on('pointerdown', () => {
+        this.gameSettings.n_sound++;
+      });
+    this.add
+      .text(250, 270, '➖', { font: '30px' })
+      .setInteractive()
+      .on('pointerdown', () => {
+        this.gameSettings.n_sound--;
+      });
+
+    this.add.text(50, 370, 'N-back', { font: '30px' });
+
+    this.add
+      .text(350, 370, '➕', { font: '30px' })
+      .setInteractive()
+      .on('pointerdown', () => {
+        this.gameSettings.nback++;
+      });
+    this.add
+      .text(250, 370, '➖', { font: '30px' })
+      .setInteractive()
+      .on('pointerdown', () => {
+        if (this.gameSettings.nback > 1) {
+          this.gameSettings.nback--;
+        }
+      });
+
+    this.add
+      .text(350, 470, '➕', { font: '30px' })
+      .setInteractive()
+      .on('pointerdown', () => {
+        this.gameSettings.interval =
+          Math.round((this.gameSettings.interval + 0.1) * 1e12) / 1e12;
+      });
+    this.add
+      .text(250, 470, '➖', { font: '30px' })
+      .setInteractive()
+      .on('pointerdown', () => {
+        if (this.gameSettings.interval > 1) {
+          this.gameSettings.interval =
+            Math.round((this.gameSettings.interval - 0.1) * 1e12) / 1e12;
+        }
+      });
+
+    this.add.text(50, 470, 'Interval', { font: '25px' });
+
+    this.add
+      .text(50, 570, 'Switch Sound', { font: '30px' })
+      .setInteractive()
+      .on('pointerdown', () => {
+        this.gameSettings.sound_type;
+      });
   }
 
   update() {
     stats.setText([
       'trail: ' + this.gameSettings.trail,
       'nback: ' + this.gameSettings.nback,
-      'nsound: ' + this.gameSettings.n_sound
+      'nsound: ' + this.gameSettings.n_sound,
+      'interval: ' + this.gameSettings.interval,
+      'sound_type: ' + this.gameSettings.sound_type
     ]);
   }
 }
