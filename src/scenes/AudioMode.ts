@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 
 interface GameConfig {
+  sound_idx: number;
   n_sound: any;
   trail: number;
   nback: number;
@@ -36,25 +37,34 @@ async function nback_game(
   nback: number,
   interval: number,
   n_trail: number,
-  n_sound: number
+  n_sound: number,
+  sound_type: string
 ) {
-  const h = audio.sound.add('h');
-  const j = audio.sound.add('j');
-  const k = audio.sound.add('k');
-  const l = audio.sound.add('l');
-  const q = audio.sound.add('q');
-  const r = audio.sound.add('r');
-  const s = audio.sound.add('s');
-  const t = audio.sound.add('t');
+  let all_sounds: Phaser.Sound.BaseSound[] = [];
+  console.log(sound_type);
+
+  switch (sound_type) {
+    case 'number':
+      for (const ele of ['1', '2', '3', '4', '5', '6', '7', '8']) {
+        all_sounds.push(audio.sound.add(ele));
+      }
+      break;
+
+    default:
+      for (const ele of ['h', 'j', 'k', 'l', 'q', 'r', 's', 't']) {
+        all_sounds.push(audio.sound.add(ele));
+      }
+      break;
+  }
+  all_sounds = sampleArray(all_sounds, n_sound);
+
   const correct = audio.sound.add('correct');
   const wrong = audio.sound.add('wrong');
 
   let break_loop = false;
 
-  const all_sounds = sampleArray([h, j, k, l, q, r, s, t], n_sound);
-
   const stopBtn = audio.add
-    .text(320, 70, 'Stop', { font: '40px' })
+    .text(200, 70, 'Stop', { font: '40px' })
     .setInteractive();
   stopBtn.on('pointerdown', () => {
     break_loop = true;
@@ -93,7 +103,7 @@ export default class AudioMode extends Phaser.Scene {
   interval: number;
   n_sound: number;
   score: number;
-  sound_type: string | undefined;
+  sound_type!: string;
   constructor() {
     super('Audio mode');
     this.trail = 0;
@@ -112,20 +122,30 @@ export default class AudioMode extends Phaser.Scene {
   }
 
   preload() {
-    this.load.audio('h', 'assets/sounds/alpha/h.mp3');
-    this.load.audio('j', 'assets/sounds/alpha/j.mp3');
-    this.load.audio('k', 'assets/sounds/alpha/k.mp3');
-    this.load.audio('l', 'assets/sounds/alpha/l.mp3');
-    this.load.audio('q', 'assets/sounds/alpha/q.mp3');
-    this.load.audio('r', 'assets/sounds/alpha/r.mp3');
-    this.load.audio('s', 'assets/sounds/alpha/s.mp3');
-    this.load.audio('t', 'assets/sounds/alpha/t.mp3');
-
+    switch (this.sound_type) {
+      case 'number':
+        for (const ele of ['1', '2', '3', '4', '5', '6', '7', '8']) {
+          this.load.audio(ele, `assets/sounds/number/${ele}.mp3`);
+        }
+        break;
+      default:
+        for (const ele of ['h', 'j', 'k', 'l', 'q', 'r', 's', 't']) {
+          this.load.audio(ele, `assets/sounds/alpha/${ele}.mp3`);
+        }
+        break;
+    }
     this.load.audio('correct', 'assets/sounds/feedback/rightanswer.mp3');
     this.load.audio('wrong', 'assets/sounds/feedback/wronganswer.mp3');
   }
 
   create() {
-    nback_game(this, this.nback, this.interval, this.trail, this.n_sound);
+    nback_game(
+      this,
+      this.nback,
+      this.interval,
+      this.trail,
+      this.n_sound,
+      this.sound_type
+    );
   }
 }

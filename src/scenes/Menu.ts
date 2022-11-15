@@ -3,6 +3,7 @@ let stats: Phaser.GameObjects.Text;
 
 export default class Menu extends Phaser.Scene {
   sound_list: string[];
+  sound_index: number;
   gameSettings: {
     trail: number;
     nback: number;
@@ -12,15 +13,16 @@ export default class Menu extends Phaser.Scene {
   };
   constructor() {
     super('Menu');
+    this.sound_index = 0;
+    this.sound_list = ['alpha', 'number'];
 
-    (this.sound_list = ['alpha', 'digit']),
-      (this.gameSettings = {
-        trail: 60,
-        nback: 3,
-        interval: 3,
-        n_sound: 5,
-        sound_type: this.sound_list[0]
-      });
+    this.gameSettings = {
+      trail: 60,
+      nback: 3,
+      interval: 3,
+      n_sound: 5,
+      sound_type: this.sound_list[this.sound_index]
+    };
   }
 
   preload() {}
@@ -119,7 +121,8 @@ export default class Menu extends Phaser.Scene {
       .text(50, 570, 'Switch Sound', { font: '30px' })
       .setInteractive()
       .on('pointerdown', () => {
-        this.gameSettings.sound_type;
+        this.sound_index = (this.sound_index + 1) % this.sound_list.length;
+        this.gameSettings.sound_type = this.sound_list[this.sound_index];
       });
   }
 
@@ -129,7 +132,7 @@ export default class Menu extends Phaser.Scene {
       'nback: ' + this.gameSettings.nback,
       'nsound: ' + this.gameSettings.n_sound,
       'interval: ' + this.gameSettings.interval,
-      'sound_type: ' + this.gameSettings.sound_type
+      'sound_type: ' + this.sound_list[this.sound_index]
     ]);
   }
 }
