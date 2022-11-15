@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 let stats: Phaser.GameObjects.Text;
 
 export default class Menu extends Phaser.Scene {
-  sounds: string[];
+  sound_list: string[];
   gameSettings: {
     trail: number;
     nback: number;
@@ -12,21 +12,22 @@ export default class Menu extends Phaser.Scene {
   };
   constructor() {
     super('Menu');
-    this.sounds = ['alpha', 'digit'];
-    this.gameSettings = {
-      trail: 60,
-      nback: 3,
-      interval: 3,
-      n_sound: 5,
-      sound_type: this.sounds[0]
-    };
+
+    (this.sound_list = ['alpha', 'digit']),
+      (this.gameSettings = {
+        trail: 60,
+        nback: 3,
+        interval: 3,
+        n_sound: 5,
+        sound_type: this.sound_list[0]
+      });
   }
 
   preload() {}
 
   create() {
     const startBtn = this.add
-      .text(150, 70, 'Start', { font: '40px' })
+      .text(200, 70, 'Start', { font: '40px' })
       .setInteractive();
     startBtn.on('pointerdown', () => {
       this.scene.start('Audio mode', {

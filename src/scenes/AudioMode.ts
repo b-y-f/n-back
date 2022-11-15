@@ -5,6 +5,7 @@ interface GameConfig {
   trail: number;
   nback: number;
   interval: number;
+  sound_type: string;
 }
 
 function getRandomInt(min: number, max: number) {
@@ -50,7 +51,7 @@ async function nback_game(
 
   let break_loop = false;
 
-  const all_sounds = sampleArray([h, j, k, l, q, r, s, t],n_sound);
+  const all_sounds = sampleArray([h, j, k, l, q, r, s, t], n_sound);
 
   const stopBtn = audio.add
     .text(320, 70, 'Stop', { font: '40px' })
@@ -83,8 +84,7 @@ async function nback_game(
     correct_cond = trails[idx - nback] == ele;
     await sleep(interval);
   }
-  audio.add.text(500, 600, String(audio.score), { font: '40px' });
-
+  audio.scene.start('Menu');
 }
 
 export default class AudioMode extends Phaser.Scene {
@@ -93,6 +93,7 @@ export default class AudioMode extends Phaser.Scene {
   interval: number;
   n_sound: number;
   score: number;
+  sound_type: string | undefined;
   constructor() {
     super('Audio mode');
     this.trail = 0;
@@ -107,6 +108,7 @@ export default class AudioMode extends Phaser.Scene {
     this.nback = data.nback;
     this.interval = data.interval;
     this.n_sound = data.n_sound;
+    this.sound_type = data.sound_type;
   }
 
   preload() {
