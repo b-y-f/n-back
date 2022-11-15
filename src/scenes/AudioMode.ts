@@ -12,6 +12,20 @@ function getRandomInt(min: number, max: number) {
   return Math.floor(Math.random() * (max - min) + min);
 }
 
+function sampleArray(arr: Phaser.Sound.BaseSound[], size: number) {
+  var shuffled = arr.slice(0),
+    i = arr.length,
+    temp,
+    index;
+  while (i--) {
+    index = Math.floor((i + 1) * Math.random());
+    temp = shuffled[index];
+    shuffled[index] = shuffled[i];
+    shuffled[i] = temp;
+  }
+  return shuffled.slice(0, size);
+}
+
 function sleep(sec: number) {
   return new Promise((resolve) => setTimeout(resolve, sec * 1000));
 }
@@ -36,7 +50,7 @@ async function nback_game(
 
   let break_loop = false;
 
-  const all_sounds = [h, j, k, l, q, r, s, t].slice(0, n_sound);
+  const all_sounds = sampleArray([h, j, k, l, q, r, s, t],n_sound);
 
   const stopBtn = audio.add
     .text(320, 70, 'Stop', { font: '40px' })
