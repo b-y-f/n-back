@@ -51,7 +51,7 @@ async function nback_game(game: AudioMode) {
   let break_loop = false;
 
   const stopBtn = game.add
-    .text(180, 670, 'Stop', { font: '20px' })
+    .text(200, 700, 'Stop', { font: '20px' })
     .setInteractive();
   stopBtn.on('pointerdown', () => {
     break_loop = true;
