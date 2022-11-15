@@ -9,6 +9,13 @@ interface GameConfig {
   sound_type: string;
 }
 
+interface ConfusionMatrix {
+  TP: number;
+  TN: number;
+  FP: number;
+  FN: number;
+}
+
 function getRandomInt(min: number, max: number) {
   // The maximum is exclusive and the minimum is inclusive
   return Math.floor(Math.random() * (max - min) + min);
@@ -41,7 +48,7 @@ async function nback_game(
   sound_type: string
 ) {
   let all_sounds: Phaser.Sound.BaseSound[] = [];
-  console.log(sound_type);
+  // console.log(sound_type);
 
   switch (sound_type) {
     case 'number':
@@ -64,7 +71,7 @@ async function nback_game(
   let break_loop = false;
 
   const stopBtn = audio.add
-    .text(200, 70, 'Stop', { font: '40px' })
+    .text(180, 670, 'Stop', { font: '20px' })
     .setInteractive();
   stopBtn.on('pointerdown', () => {
     break_loop = true;
@@ -98,18 +105,14 @@ async function nback_game(
 }
 
 export default class AudioMode extends Phaser.Scene {
-  trail: number;
-  nback: number;
-  interval: number;
-  n_sound: number;
-  score: number;
+  trail!: number;
+  nback!: number;
+  interval!: number;
+  n_sound!: number;
   sound_type!: string;
+  score: number;
   constructor() {
     super('Audio mode');
-    this.trail = 0;
-    this.nback = 0;
-    this.interval = 0;
-    this.n_sound = 0;
     this.score = 0;
   }
 

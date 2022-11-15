@@ -29,7 +29,7 @@ export default class Menu extends Phaser.Scene {
 
   create() {
     const startBtn = this.add
-      .text(200, 70, 'Start', { font: '40px' })
+      .text(180, 670, 'Start', { font: '40px' })
       .setInteractive();
     startBtn.on('pointerdown', () => {
       this.scene.start('Audio mode', {
