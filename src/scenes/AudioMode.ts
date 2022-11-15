@@ -1,20 +1,7 @@
 import Phaser from 'phaser';
+import { ConfusionMatrix, GameConfig } from './types';
 
-interface GameConfig {
-  sound_idx: number;
-  n_sound: any;
-  trail: number;
-  nback: number;
-  interval: number;
-  sound_type: string;
-}
-
-interface ConfusionMatrix {
-  TP: number;
-  TN: number;
-  FP: number;
-  FN: number;
-}
+let scorePanel: Phaser.GameObjects.Text;
 
 function getRandomInt(min: number, max: number) {
   // The maximum is exclusive and the minimum is inclusive
@@ -39,69 +26,74 @@ function sleep(sec: number) {
   return new Promise((resolve) => setTimeout(resolve, sec * 1000));
 }
 
-async function nback_game(
-  audio: AudioMode,
-  nback: number,
-  interval: number,
-  n_trail: number,
-  n_sound: number,
-  sound_type: string
-) {
+async function nback_game(game: AudioMode) {
   let all_sounds: Phaser.Sound.BaseSound[] = [];
   // console.log(sound_type);
 
-  switch (sound_type) {
+  switch (game.sound_type) {
     case 'number':
       for (const ele of ['1', '2', '3', '4', '5', '6', '7', '8']) {
-        all_sounds.push(audio.sound.add(ele));
+        all_sounds.push(game.sound.add(ele));
       }
       break;
 
     default:
       for (const ele of ['h', 'j', 'k', 'l', 'q', 'r', 's', 't']) {
-        all_sounds.push(audio.sound.add(ele));
+        all_sounds.push(game.sound.add(ele));
       }
       break;
   }
-  all_sounds = sampleArray(all_sounds, n_sound);
+  all_sounds = sampleArray(all_sounds, game.n_sound);
 
-  const correct = audio.sound.add('correct');
-  const wrong = audio.sound.add('wrong');
+  const correct = game.sound.add('correct');
+  const wrong = game.sound.add('wrong');
 
   let break_loop = false;
 
-  const stopBtn = audio.add
+  const stopBtn = game.add
     .text(180, 670, 'Stop', { font: '20px' })
     .setInteractive();
   stopBtn.on('pointerdown', () => {
     break_loop = true;
-    audio.scene.start('Menu');
+    game.scene.start('Menu', { score: game.score });
   });
 
-  const trails = Array.from({ length: n_trail }, () =>
-    getRandomInt(0, n_sound)
+  const trails = Array.from({ length: game.trail }, () =>
+    getRandomInt(0, game.n_sound)
   );
 
-  let correct_cond = false;
-  audio.input.on('pointerdown', () => {
-    if (correct_cond) {
-      // console.log('good');
-      correct.play();
-    } else {
-      // console.log('bad');
-      wrong.play();
+  let actual_correct = false;
+  let clicked: boolean;
+  game.input.on('pointerdown', () => {
+    if (!clicked) {
+      clicked = true;
+      if (actual_correct) {
+        correct.play();
+        game.score.TP++;
+      } else {
+        wrong.play();
+        game.score.FP++;
+      }
     }
   });
 
   for (const [idx, ele] of trails.entries()) {
+    clicked = false; // every round have only one chance to click
     if (break_loop) {
       break;
     }
     all_sounds[ele].play();
-    correct_cond = trails[idx - nback] == ele;
-    await sleep(interval);
+    actual_correct = trails[idx - game.nback] == ele;
+    if (!clicked) {
+      if (actual_correct) {
+        game.score.FN++;
+      } else {
+        game.score.TN++;
+      }
+    }
+    await sleep(game.interval);
   }
-  audio.scene.start('Menu');
+  game.scene.start('Menu', { score: game.score });
 }
 
 export default class AudioMode extends Phaser.Scene {
@@ -110,10 +102,15 @@ export default class AudioMode extends Phaser.Scene {
   interval!: number;
   n_sound!: number;
   sound_type!: string;
-  score: number;
+  score: ConfusionMatrix;
   constructor() {
     super('Audio mode');
-    this.score = 0;
+    this.score = {
+      TP: 0,
+      TN: 0,
+      FP: 0,
+      FN: 0
+    };
   }
 
   init(data: GameConfig) {
@@ -142,13 +139,16 @@ export default class AudioMode extends Phaser.Scene {
   }
 
   create() {
-    nback_game(
-      this,
-      this.nback,
-      this.interval,
-      this.trail,
-      this.n_sound,
-      this.sound_type
-    );
+    scorePanel = this.add.text(400, 10, '', { color: '#00ff00' });
+    nback_game(this);
+  }
+
+  update(): void {
+    scorePanel.setText([
+      'TP:' + this.score.TP,
+      'TN:' + this.score.TN,
+      'FP:' + this.score.FP,
+      'FN:' + this.score.FN
+    ]);
   }
 }
