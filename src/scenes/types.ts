@@ -3,6 +3,7 @@ export interface ConfusionMatrix {
   TN: number;
   FP: number;
   FN: number;
+  correct: string;
 }
 
 export interface GameConfig {

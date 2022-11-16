@@ -26,6 +26,16 @@ function sleep(sec: number) {
   return new Promise((resolve) => setTimeout(resolve, sec * 1000));
 }
 
+function calcCorrectRate(game: AudioMode) {
+  if (game.score.TP + game.score.FN == 0) {
+    return;
+  }
+  game.score.correct = (
+    (game.score.TP + game.score.FN) /
+    (game.score.TP + game.score.FN + game.score.FP)
+  ).toFixed(2);
+}
+
 async function nback_game(game: AudioMode) {
   // let trails;
   let all_sounds: Phaser.Sound.BaseSound[] = [];
@@ -35,7 +45,8 @@ async function nback_game(game: AudioMode) {
       TP: 0,
       TN: 0,
       FP: 0,
-      FN: 0
+      FN: 0,
+      correct: ''
     };
     all_sounds = [];
   }
@@ -100,9 +111,11 @@ async function nback_game(game: AudioMode) {
       if (actual_correct) {
         correct.play();
         game.score.TP++;
+        calcCorrectRate(game);
       } else {
         wrong.play();
         game.score.FP++;
+        calcCorrectRate(game);
       }
     }
   });
@@ -120,12 +133,13 @@ async function nback_game(game: AudioMode) {
     if (!clicked) {
       if (actual_correct) {
         game.score.FN++;
+        calcCorrectRate(game);
       } else {
         game.score.TN++;
+        calcCorrectRate(game);
       }
     }
   }
-  // game.scene.start('Menu', { score: game.score });
 }
 
 export default class AudioMode extends Phaser.Scene {
@@ -141,7 +155,8 @@ export default class AudioMode extends Phaser.Scene {
       TP: 0,
       TN: 0,
       FP: 0,
-      FN: 0
+      FN: 0,
+      correct: ''
     };
   }
 
@@ -190,7 +205,7 @@ export default class AudioMode extends Phaser.Scene {
   }
 
   create() {
-    scorePanel = this.add.text(400, 10, '', { color: '#00ff00' });
+    scorePanel = this.add.text(10, 10, '', { color: '#00ff00' });
     nback_game(this);
   }
 
@@ -199,7 +214,8 @@ export default class AudioMode extends Phaser.Scene {
       'TP:' + this.score.TP,
       'TN:' + this.score.TN,
       'FP:' + this.score.FP,
-      'FN:' + this.score.FN
+      'FN:' + this.score.FN,
+      'Correct:' + this.score.correct
     ]);
   }
 }
