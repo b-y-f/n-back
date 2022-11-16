@@ -84,6 +84,9 @@ async function nback_game(game: AudioMode) {
     }
     all_sounds[ele].play();
     actual_correct = trails[idx - game.nback] == ele;
+
+    await sleep(game.interval);
+
     if (!clicked) {
       if (actual_correct) {
         game.score.FN++;
@@ -91,7 +94,6 @@ async function nback_game(game: AudioMode) {
         game.score.TN++;
       }
     }
-    await sleep(game.interval);
   }
   game.scene.start('Menu', { score: game.score });
 }
