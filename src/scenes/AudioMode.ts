@@ -30,9 +30,9 @@ function calcCorrectRate(game: AudioMode) {
   if (game.score.TP + game.score.FN == 0) {
     return;
   }
-  game.score.precision = (
+  game.score.correct = (
     game.score.TP /
-    (game.score.TP + game.score.FP)
+    (game.score.TP + game.score.FP + game.score.FN)
   ).toFixed(2);
 }
 
@@ -46,7 +46,7 @@ async function nback_game(game: AudioMode) {
       TN: 0,
       FP: 0,
       FN: 0,
-      precision: ''
+      correct: ''
     };
     all_sounds = [];
   }
@@ -156,7 +156,7 @@ export default class AudioMode extends Phaser.Scene {
       TN: 0,
       FP: 0,
       FN: 0,
-      precision: ''
+      correct: ''
     };
   }
 
@@ -215,7 +215,7 @@ export default class AudioMode extends Phaser.Scene {
       'TN:' + this.score.TN,
       'FP:' + this.score.FP,
       'FN:' + this.score.FN,
-      'Correct:' + this.score.precision
+      'Correct:' + this.score.correct
     ]);
   }
 }
