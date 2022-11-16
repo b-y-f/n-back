@@ -14,7 +14,7 @@ export default class Menu extends Phaser.Scene {
   constructor() {
     super('Menu');
     this.sound_index = 0;
-    this.sound_list = ['alpha', 'number'];
+    this.sound_list = ['alpha', 'number', 'piano', 'shapes'];
 
     this.gameSettings = {
       trail: 60,

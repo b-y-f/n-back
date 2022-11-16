@@ -46,6 +46,25 @@ async function nback_game(game: AudioMode) {
         all_sounds.push(game.sound.add(ele));
       }
       break;
+    case 'piano':
+      for (const ele of ['A4', 'B4', 'C4', 'C5', 'D4', 'E4', 'F4', 'G4']) {
+        all_sounds.push(game.sound.add(ele));
+      }
+      break;
+    case 'shapes':
+      for (const ele of [
+        'circle',
+        'hexagon',
+        'line',
+        'pentagon',
+        'point',
+        'rectangle',
+        'square',
+        'triangle'
+      ]) {
+        all_sounds.push(game.sound.add(ele));
+      }
+      break;
 
     default:
       for (const ele of ['h', 'j', 'k', 'l', 'q', 'r', 's', 't']) {
@@ -139,6 +158,25 @@ export default class AudioMode extends Phaser.Scene {
       case 'number':
         for (const ele of ['1', '2', '3', '4', '5', '6', '7', '8']) {
           this.load.audio(ele, `assets/sounds/number/${ele}.mp3`);
+        }
+        break;
+      case 'piano':
+        for (const ele of ['A4', 'B4', 'C4', 'C5', 'D4', 'E4', 'F4', 'G4']) {
+          this.load.audio(ele, `assets/sounds/piano/${ele}.wav`);
+        }
+        break;
+      case 'shapes':
+        for (const ele of [
+          'circle',
+          'hexagon',
+          'line',
+          'pentagon',
+          'point',
+          'rectangle',
+          'square',
+          'triangle'
+        ]) {
+          this.load.audio(ele, `assets/sounds/shapes/${ele}.mp3`);
         }
         break;
       default:
