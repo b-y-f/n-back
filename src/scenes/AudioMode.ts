@@ -27,7 +27,9 @@ function sleep(sec: number) {
 }
 
 async function nback_game(game: AudioMode) {
+  // let trails;
   let all_sounds: Phaser.Sound.BaseSound[] = [];
+  let stopBtnClicked: boolean = false;
   function resetGame() {
     game.score = {
       TP: 0,
@@ -37,8 +39,6 @@ async function nback_game(game: AudioMode) {
     };
     all_sounds = [];
   }
-
-  // console.log(sound_type);
 
   switch (game.sound_type) {
     case 'number':
@@ -54,28 +54,28 @@ async function nback_game(game: AudioMode) {
       break;
   }
   all_sounds = sampleArray(all_sounds, game.n_sound);
+  const trails = Array.from({ length: game.trail }, () =>
+    getRandomInt(0, game.n_sound)
+  );
 
   const correct = game.sound.add('correct');
   const wrong = game.sound.add('wrong');
-
-  let break_loop = false;
 
   const stopBtn = game.add
     .text(200, 750, 'STOP GAME', { font: '20px' })
     .setInteractive();
   stopBtn.on('pointerdown', () => {
-    break_loop = true;
+    stopBtnClicked = true;
     resetGame();
     game.scene.start('Menu');
   });
 
-  const trails = Array.from({ length: game.trail }, () =>
-    getRandomInt(0, game.n_sound)
-  );
-
   let actual_correct = false;
   let clicked: boolean;
   game.input.on('pointerdown', () => {
+    if (stopBtnClicked) {
+      return;
+    }
     if (!clicked) {
       clicked = true;
       if (actual_correct) {
@@ -90,7 +90,7 @@ async function nback_game(game: AudioMode) {
 
   for (const [idx, ele] of trails.entries()) {
     clicked = false; // every round have only one chance to click
-    if (break_loop) {
+    if (stopBtnClicked) {
       break;
     }
     all_sounds[ele].play();
