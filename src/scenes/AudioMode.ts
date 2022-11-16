@@ -55,7 +55,7 @@ async function nback_game(game: AudioMode) {
     .setInteractive();
   stopBtn.on('pointerdown', () => {
     break_loop = true;
-    game.scene.start('Menu', { score: game.score });
+    game.scene.start('Menu');
   });
 
   const trails = Array.from({ length: game.trail }, () =>
@@ -95,7 +95,7 @@ async function nback_game(game: AudioMode) {
       }
     }
   }
-  game.scene.start('Menu', { score: game.score });
+  // game.scene.start('Menu', { score: game.score });
 }
 
 export default class AudioMode extends Phaser.Scene {
