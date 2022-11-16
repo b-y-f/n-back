@@ -28,6 +28,16 @@ function sleep(sec: number) {
 
 async function nback_game(game: AudioMode) {
   let all_sounds: Phaser.Sound.BaseSound[] = [];
+  function resetGame() {
+    game.score = {
+      TP: 0,
+      TN: 0,
+      FP: 0,
+      FN: 0
+    };
+    all_sounds = [];
+  }
+
   // console.log(sound_type);
 
   switch (game.sound_type) {
@@ -51,10 +61,11 @@ async function nback_game(game: AudioMode) {
   let break_loop = false;
 
   const stopBtn = game.add
-    .text(200, 700, 'Stop', { font: '20px' })
+    .text(200, 750, 'STOP GAME', { font: '20px' })
     .setInteractive();
   stopBtn.on('pointerdown', () => {
     break_loop = true;
+    resetGame();
     game.scene.start('Menu');
   });
 
