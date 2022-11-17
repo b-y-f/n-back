@@ -140,6 +140,7 @@ async function nback_game(game: AudioMode) {
       }
     }
   }
+  clicked = false;
 }
 
 export default class AudioMode extends Phaser.Scene {
