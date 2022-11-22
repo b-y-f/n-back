@@ -40,16 +40,6 @@ async function nback_game(game: AudioMode) {
   // let trails;
   let all_sounds: Phaser.Sound.BaseSound[] = [];
   let stopBtnClicked: boolean = false;
-  function resetGame() {
-    game.score = {
-      TP: 0,
-      TN: 0,
-      FP: 0,
-      FN: 0,
-      correct: ''
-    };
-    all_sounds = [];
-  }
 
   switch (game.sound_type) {
     case 'number':
@@ -96,7 +86,6 @@ async function nback_game(game: AudioMode) {
     .setInteractive();
   stopBtn.on('pointerdown', () => {
     stopBtnClicked = true;
-    resetGame();
     game.scene.start('Menu');
   });
 
@@ -140,7 +129,7 @@ async function nback_game(game: AudioMode) {
       }
     }
   }
-  clicked = false;
+  clicked = true;
 }
 
 export default class AudioMode extends Phaser.Scene {
@@ -167,6 +156,13 @@ export default class AudioMode extends Phaser.Scene {
     this.interval = data.interval;
     this.n_sound = data.n_sound;
     this.sound_type = data.sound_type;
+    this.score = {
+      TP: 0,
+      TN: 0,
+      FP: 0,
+      FN: 0,
+      correct: ''
+    };
   }
 
   preload() {
