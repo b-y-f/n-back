@@ -43,7 +43,7 @@ export default class Menu extends Phaser.Scene {
 
     this.add
       .text(250, 170, '➖', {
-        font: '30px'
+        font: '40px'
       })
       .setInteractive()
       .on('pointerdown', () => {
@@ -53,7 +53,7 @@ export default class Menu extends Phaser.Scene {
       });
     this.add
       .text(350, 170, '➕', {
-        font: '30px'
+        font: '40px'
       })
       .setInteractive()
       .on('pointerdown', () => {
@@ -63,13 +63,13 @@ export default class Menu extends Phaser.Scene {
     this.add.text(50, 270, 'N-back', { font: '30px' });
 
     this.add
-      .text(350, 270, '➕', { font: '30px' })
+      .text(350, 270, '➕', { font: '40px' })
       .setInteractive()
       .on('pointerdown', () => {
         this.gameSettings.nback++;
       });
     this.add
-      .text(250, 270, '➖', { font: '30px' })
+      .text(250, 270, '➖', { font: '40px' })
       .setInteractive()
       .on('pointerdown', () => {
         if (this.gameSettings.nback > 1) {
@@ -80,13 +80,13 @@ export default class Menu extends Phaser.Scene {
     this.add.text(50, 370, 'Sample', { font: '30px' });
 
     this.add
-      .text(350, 370, '➕', { font: '30px' })
+      .text(350, 370, '➕', { font: '40px' })
       .setInteractive()
       .on('pointerdown', () => {
         this.gameSettings.n_sound++;
       });
     this.add
-      .text(250, 370, '➖', { font: '30px' })
+      .text(250, 370, '➖', { font: '40px' })
       .setInteractive()
       .on('pointerdown', () => {
         if (this.gameSettings.n_sound > 2) {
@@ -95,14 +95,14 @@ export default class Menu extends Phaser.Scene {
       });
 
     this.add
-      .text(350, 470, '➕', { font: '30px' })
+      .text(350, 470, '➕', { font: '40px' })
       .setInteractive()
       .on('pointerdown', () => {
         this.gameSettings.interval =
           Math.round((this.gameSettings.interval + 0.1) * 1e12) / 1e12;
       });
     this.add
-      .text(250, 470, '➖', { font: '30px' })
+      .text(250, 470, '➖', { font: '40px' })
       .setInteractive()
       .on('pointerdown', () => {
         if (this.gameSettings.interval > 1) {
