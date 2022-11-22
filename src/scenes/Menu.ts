@@ -42,59 +42,55 @@ export default class Menu extends Phaser.Scene {
     this.add.text(50, 170, 'Trails', { font: '30px' });
 
     this.add
-      .text(200, 170, '30', {
+      .text(250, 170, '➖', {
         font: '30px'
       })
       .setInteractive()
       .on('pointerdown', () => {
-        this.gameSettings.trail = 30;
+        if (this.gameSettings.trail > 30) {
+          this.gameSettings.trail -= 30;
+        }
       });
     this.add
-      .text(300, 170, '60', {
+      .text(350, 170, '➕', {
         font: '30px'
       })
       .setInteractive()
       .on('pointerdown', () => {
-        this.gameSettings.trail = 60;
-      });
-    this.add
-      .text(400, 170, '90', {
-        font: '30px'
-      })
-      .setInteractive()
-      .on('pointerdown', () => {
-        this.gameSettings.trail = 90;
+        this.gameSettings.trail += 30;
       });
 
-    this.add.text(50, 270, 'Sample', { font: '30px' });
+    this.add.text(50, 270, 'N-back', { font: '30px' });
 
     this.add
       .text(350, 270, '➕', { font: '30px' })
       .setInteractive()
       .on('pointerdown', () => {
-        this.gameSettings.n_sound++;
+        this.gameSettings.nback++;
       });
     this.add
       .text(250, 270, '➖', { font: '30px' })
       .setInteractive()
       .on('pointerdown', () => {
-        this.gameSettings.n_sound--;
+        if (this.gameSettings.nback > 1) {
+          this.gameSettings.nback--;
+        }
       });
 
-    this.add.text(50, 370, 'N-back', { font: '30px' });
+    this.add.text(50, 370, 'Sample', { font: '30px' });
 
     this.add
       .text(350, 370, '➕', { font: '30px' })
       .setInteractive()
       .on('pointerdown', () => {
-        this.gameSettings.nback++;
+        this.gameSettings.n_sound++;
       });
     this.add
       .text(250, 370, '➖', { font: '30px' })
       .setInteractive()
       .on('pointerdown', () => {
-        if (this.gameSettings.nback > 1) {
-          this.gameSettings.nback--;
+        if (this.gameSettings.n_sound > 2) {
+          this.gameSettings.n_sound--;
         }
       });
 
