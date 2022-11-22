@@ -41,30 +41,30 @@ export default class Menu extends Phaser.Scene {
 
     this.add.text(50, 170, 'Trails', { font: '30px' });
 
-    const t_30 = this.add
+    this.add
       .text(200, 170, '30', {
         font: '30px'
       })
-      .setInteractive();
-    const t_60 = this.add
+      .setInteractive()
+      .on('pointerdown', () => {
+        this.gameSettings.trail = 30;
+      });
+    this.add
       .text(300, 170, '60', {
         font: '30px'
       })
-      .setInteractive();
-    const t_90 = this.add
+      .setInteractive()
+      .on('pointerdown', () => {
+        this.gameSettings.trail = 60;
+      });
+    this.add
       .text(400, 170, '90', {
         font: '30px'
       })
-      .setInteractive();
-    t_30.on('pointerdown', () => {
-      this.gameSettings.trail = 30;
-    });
-    t_60.on('pointerdown', () => {
-      this.gameSettings.trail = 60;
-    });
-    t_90.on('pointerdown', () => {
-      this.gameSettings.trail = 90;
-    });
+      .setInteractive()
+      .on('pointerdown', () => {
+        this.gameSettings.trail = 90;
+      });
 
     this.add.text(50, 270, 'Sample', { font: '30px' });
 
