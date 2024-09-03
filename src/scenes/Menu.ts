@@ -83,7 +83,9 @@ export default class Menu extends Phaser.Scene {
       .text(350, 370, '➕', { font: '40px' })
       .setInteractive()
       .on('pointerdown', () => {
+        if (this.gameSettings.n_sound < 8) {
         this.gameSettings.n_sound++;
+        }
       });
     this.add
       .text(250, 370, '➖', { font: '40px' })
